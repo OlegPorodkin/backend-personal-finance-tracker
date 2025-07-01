@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = jwtUtils.extractUsername(jwt);
+                username = jwtUtils.extractEmail(jwt);
             } catch (ExpiredJwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().println("{\"error\":\"ACCESS_TOKEN_EXPIRED\"}");
