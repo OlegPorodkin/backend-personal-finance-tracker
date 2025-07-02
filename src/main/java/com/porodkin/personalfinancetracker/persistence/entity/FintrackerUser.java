@@ -37,7 +37,7 @@ public class FintrackerUser {
         this.password = password;
     }
 
-    public Boolean getEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
