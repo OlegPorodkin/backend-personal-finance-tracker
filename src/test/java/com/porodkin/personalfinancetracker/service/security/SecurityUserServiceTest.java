@@ -1,6 +1,7 @@
 package com.porodkin.personalfinancetracker.service.security;
 
 import com.porodkin.personalfinancetracker.persistence.entity.FintrackerUser;
+import com.porodkin.personalfinancetracker.persistence.entity.UserRole;
 import com.porodkin.personalfinancetracker.persistence.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,8 +14,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,6 +41,7 @@ class SecurityUserServiceTest {
         FintrackerUser entity = new FintrackerUser();
         entity.setEmail(EMAIL);
         entity.setPassword(PWD);
+        entity.setRoles(Set.of(UserRole.USER));
 
         when(repository.findByEmail(EMAIL)).thenReturn(Optional.of(entity));
 
@@ -50,7 +54,7 @@ class SecurityUserServiceTest {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        assertEquals(List.of("ROLE_ADMIN"), roles);
+        assertEquals(List.of("USER"), roles);
 
         verify(repository).findByEmail(EMAIL);
     }

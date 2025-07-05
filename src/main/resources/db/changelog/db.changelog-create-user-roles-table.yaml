@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-roles-table
+      author: Oleg Porodkin
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
