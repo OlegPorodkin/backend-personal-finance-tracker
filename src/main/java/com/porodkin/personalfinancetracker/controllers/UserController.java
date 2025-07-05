@@ -2,7 +2,7 @@ package com.porodkin.personalfinancetracker.controllers;
 
 import com.porodkin.personalfinancetracker.dto.request.security.AuthenticationRequest;
 import com.porodkin.personalfinancetracker.dto.request.security.RegisterNewUserRequest;
-import com.porodkin.personalfinancetracker.dto.request.user.NewUserRequest;
+import com.porodkin.personalfinancetracker.dto.request.user.NewUser;
 import com.porodkin.personalfinancetracker.dto.response.security.AuthenticationResponse;
 import com.porodkin.personalfinancetracker.dto.response.user.NewUserResponse;
 import com.porodkin.personalfinancetracker.service.security.AuthenticationService;
@@ -26,7 +26,11 @@ public class UserController {
         this.userRegistration = userRegistration;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping(
+            value = "/authenticate",
+            consumes = "application/json",
+            produces = "application/json"
+    )
     public ResponseEntity<? extends AuthenticationResponse> authenticateUser(@RequestBody AuthenticationRequest request) {
 
         return ResponseEntity
@@ -34,12 +38,16 @@ public class UserController {
                 .body(authenticationService.authenticate(request.email(), request.password()));
     }
 
-    @PostMapping("/register")
+    @PostMapping(
+            value = "/register",
+            consumes = "application/json",
+            produces = "application/json"
+    )
     public ResponseEntity<? extends NewUserResponse> registerUser(@RequestBody RegisterNewUserRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userRegistration.register(new NewUserRequest(request.username(), request.email(), request.password())));
+                .body(userRegistration.register(new NewUser(request.username(), request.email(), request.password())));
     }
 }
 

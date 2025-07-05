@@ -1,6 +1,6 @@
 package com.porodkin.personalfinancetracker.service.user.impl;
 
-import com.porodkin.personalfinancetracker.dto.request.user.NewUserRequest;
+import com.porodkin.personalfinancetracker.dto.request.user.NewUser;
 import com.porodkin.personalfinancetracker.dto.response.user.CreatedUserResponse;
 import com.porodkin.personalfinancetracker.persistence.entity.FintrackerUser;
 import com.porodkin.personalfinancetracker.persistence.repository.UserRepository;
@@ -44,7 +44,7 @@ class NewUserRegistrationTest {
 
         when(encoder.encode(RAW)).thenReturn(HASH);
 
-        CreatedUserResponse dto = registration.register(new NewUserRequest(USERNAME, EMAIL, RAW));
+        CreatedUserResponse dto = registration.register(new NewUser(USERNAME, EMAIL, RAW));
         assertNotNull(dto);
 
         ArgumentCaptor<FintrackerUser> cap = ArgumentCaptor.forClass(FintrackerUser.class);
@@ -68,7 +68,7 @@ class NewUserRegistrationTest {
                     .thenReturn(Optional.of(new FintrackerUser()));
 
             assertThrows(BadCredentialsException.class,
-                    () -> registration.register(new NewUserRequest(USERNAME, EMAIL, RAW)));
+                    () -> registration.register(new NewUser(USERNAME, EMAIL, RAW)));
 
             verify(repository, never()).save(any());
             verify(encoder,    never()).encode(anyString());
