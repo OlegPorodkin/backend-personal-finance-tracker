@@ -1,5 +1,6 @@
 package com.porodkin.personalfinancetracker.service.user.impl;
 
+import com.porodkin.personalfinancetracker.controllers.exceptions.UserAlreadyExistException;
 import com.porodkin.personalfinancetracker.dto.request.user.NewUser;
 import com.porodkin.personalfinancetracker.dto.response.user.CreatedUserResponse;
 import com.porodkin.personalfinancetracker.persistence.entity.FintrackerUser;
@@ -24,11 +25,11 @@ public class NewUserRegistration implements UserRegistration {
     }
 
     @Override
-    public CreatedUserResponse register(NewUser user) throws BadCredentialsException {
+    public CreatedUserResponse register(NewUser user) throws UserAlreadyExistException {
         repository
                 .findByEmail(user.email())
                 .ifPresent(fintrackerUser -> {
-                    throw new BadCredentialsException("User is already registered");
+                    throw new UserAlreadyExistException("User " + user.email() + " is already registered");
                 });
 
         FintrackerUser fintrackerUser = new FintrackerUser();

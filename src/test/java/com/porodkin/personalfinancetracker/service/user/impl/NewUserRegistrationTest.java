@@ -1,5 +1,6 @@
 package com.porodkin.personalfinancetracker.service.user.impl;
 
+import com.porodkin.personalfinancetracker.controllers.exceptions.UserAlreadyExistException;
 import com.porodkin.personalfinancetracker.dto.request.user.NewUser;
 import com.porodkin.personalfinancetracker.dto.response.user.CreatedUserResponse;
 import com.porodkin.personalfinancetracker.persistence.entity.FintrackerUser;
@@ -12,7 +13,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -62,12 +62,12 @@ class NewUserRegistrationTest {
     class DuplicateEmail {
 
         @Test
-        @DisplayName("если email занят → BadCredentialsException и нет encode/save")
+        @DisplayName("if email exist → UserAlreadyExistException and don`t have any encode/save")
         void duplicateThrows() {
             when(repository.findByEmail(EMAIL))
                     .thenReturn(Optional.of(new FintrackerUser()));
 
-            assertThrows(BadCredentialsException.class,
+            assertThrows(UserAlreadyExistException.class,
                     () -> registration.register(new NewUser(USERNAME, EMAIL, RAW)));
 
             verify(repository, never()).save(any());
